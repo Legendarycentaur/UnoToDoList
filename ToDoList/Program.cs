@@ -52,7 +52,7 @@ void addData() // metid för att lägg ain data i filen
     Console.WriteLine("What is the task?");
     toDoItem.task = Console.ReadLine();
 
-    toDoItem.deadLine = addTime();
+    toDoItem.deadline = addTime();
 
     //toDoItem.estimatedHours = hours;
 
@@ -117,11 +117,12 @@ void markData() //Använda för att markera data
             Console.WriteLine("No changes will be made!");
         }
     }
+
     dateSortedFile[alternative] = $"{splitUp[2]};{splitUp[0]};{splitUp[1]};{done}"; //tillbaka omvandlad string. 
     for(int i=0; i < file.Length; i++)
     {
-        
-        foreach (string dataInFile in file)
+        Console.WriteLine(file[i]);
+        /*foreach (string dataInFile in file)
         {
             string[] dataFromFile = dataInFile.Split(";");
             //dateSortedFile[alternative] = $"{dataFromFile[1]};{dataFromFile[2]};{dataFromFile[0]};{dataFromFile[3]}";
@@ -130,9 +131,10 @@ void markData() //Använda för att markera data
             {
                 file[i] = $"{splitUp[2]};{splitUp[0]};{splitUp[1]};{done}";
             }
-        }
+        }*/
         
     }
+
     File.WriteAllLines(filename, file);
     Console.Clear();
     WriteMenu();
@@ -179,7 +181,7 @@ string addTime()
         {
             Console.WriteLine("Add deadline | YYYYMMDD |:");
             string date = Console.ReadLine();
-            string result = DateTime.ParseExact(date, dateFormat, CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+            string result = DateTime.ParseExact(date, dateFormat, null).ToString("yyyy-MM-dd");
             deadlineDate = result;
             break;
         }
@@ -291,19 +293,17 @@ void newShowData()
         dateData[counter] = readData.deadline;
         if (readData.isCompleted == true)
         {
-            Console.ForegroundColor
-            = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
-        else if (readData.isCompleted != true && (comparedays(now, DateTime.Parse(dataFromFile[0])) >=0))
+        else if (readData.isCompleted != true && (comparedays(now, DateTime.Parse(dataFromFile[0])) == -1))
         {
-            if (comparedays( now, DateTime.Parse(dataFromFile[0])) == 1)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            
+        }
+        else if (readData.isCompleted != true && comparedays(now, DateTime.Parse(dataFromFile[0])) <= 3 && comparedays(now, DateTime.Parse(dataFromFile[0])) >= 0)
+        {
+            
+             Console.ForegroundColor = ConsoleColor.Yellow;
         }
         else
         {
@@ -333,7 +333,20 @@ void newShowData()
 
 int comparedays( DateTime timeNowDay, DateTime deadlineDay)
 {
-return DateTime.Compare(DateTime.Parse(timeNowDay.ToString("yyyy-MM-dd")), deadlineDay);
+    int comparedTime = DateTime.Compare(DateTime.Parse(timeNowDay.Date.ToString("yyyy-MM-dd")), deadlineDay);
+    
+    if (comparedTime == 1)
+    {
+        return -1;
+    }
+    else if ((deadlineDay.Day-timeNowDay.Day <= 3 && deadlineDay.Day - timeNowDay.Day >= 0))
+    { 
+        return deadlineDay.Day-timeNowDay.Day; 
+    }
+    else
+    {
+        return -2;
+    }
 }
 
 string daysAway(DateTime timeNowDay, DateTime deadlineDay)
