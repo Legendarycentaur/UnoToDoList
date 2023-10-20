@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using System.Data;
 using System.Diagnostics.Metrics;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
@@ -35,7 +36,6 @@ while (programRuns) //Kör programmet
         case 3: newShowData();  break;
         case 4: endProgram();  break;
     }
-    //showData();
 }
 void WriteMenu() //menyn
 {
@@ -43,18 +43,37 @@ void WriteMenu() //menyn
     Console.WriteLine("To Do List\nChoose feature by:\n1. Add new task.\n2. Mark as done.\n3. Show tasks.\n4. Close application.");
 }
 void addData() // metid för att lägg ain data i filen
-{
-    Console.Clear();
-    WriteMenu();
+{   
     Console.ForegroundColor = ConsoleColor.White;
+    
     ToDoItem toDoItem = new ToDoItem();
 
     Console.WriteLine("What is the task?");
-    toDoItem.task = Console.ReadLine();
+    while (true)
+    {   
+        Console.Clear();
+        WriteMenu();
+        toDoItem.task = Console.ReadLine();
+        if (toDoItem.task.Contains(';')) { 
+            Console.WriteLine("no semicolon can be used, try again:\n");
+        }
+        else
+        {
+            break;
+        }
+    }
 
     toDoItem.deadline = addTime();
-
-    //toDoItem.estimatedHours = hours;
+    double hours = 0;
+    
+    bool isNumber = false;
+    while (isNumber == false)
+    {
+        Console.WriteLine("Input estimated amount of time t complete task: ");
+        isNumber = double.TryParse(Console.ReadLine(), out hours);
+        
+    }
+    toDoItem.estimatedHours = hours;
 
     toDoItem.isCompleted = false;
 
@@ -78,6 +97,7 @@ void markData() //Använda för att markera data
     }
     
     string[] file = File.ReadAllLines(filename);
+    
     string[] dateSortedFile = new string[file.Length];
    //string[] dateData = new string[file.Length];
     int counter = 0;
@@ -118,21 +138,17 @@ void markData() //Använda för att markera data
         }
     }
 
-    dateSortedFile[alternative] = $"{splitUp[2]};{splitUp[0]};{splitUp[1]};{done}"; //tillbaka omvandlad string. 
+    dateSortedFile[alternative] = $"{splitUp[2]};{splitUp[0]};{splitUp[1]};{done}"; //tillbaka omvandlad string.
+    
     for(int i=0; i < file.Length; i++)
     {
-        Console.WriteLine(file[i]);
-        /*foreach (string dataInFile in file)
-        {
-            string[] dataFromFile = dataInFile.Split(";");
-            //dateSortedFile[alternative] = $"{dataFromFile[1]};{dataFromFile[2]};{dataFromFile[0]};{dataFromFile[3]}";
-
-            if ($"{splitUp[2]};{splitUp[0]};{splitUp[1]};".Equals($"{dataFromFile[0]};{dataFromFile[1]};{dataFromFile[2]};"))
-            {
-                file[i] = $"{splitUp[2]};{splitUp[0]};{splitUp[1]};{done}";
-            }
-        }*/
         
+        string[] notsortedFile= file[i].Split(";");
+        
+        if (splitUp[2] == notsortedFile[0] && splitUp[0] == notsortedFile[1])//kollar vilken rad osm är samma i dokumen6tet som i arrayen. 
+        {
+            file[i]= dateSortedFile[alternative]; //sätter värdet för den korrekt formaterade stringen på den possitionen i dokuimentet där den ska vara. 
+        }
     }
 
     File.WriteAllLines(filename, file);
@@ -175,82 +191,26 @@ string addTime()
 {
     string deadlineDate = "h";
     string dateFormat = "yyyyMMdd";
-    try
+    while (true)
     {
-        while (true)
+        try
         {
             Console.WriteLine("Add deadline | YYYYMMDD |:");
             string date = Console.ReadLine();
-            string result = DateTime.ParseExact(date, dateFormat, null).ToString("yyyy-MM-dd");
+            string result = DateTime.ParseExact(date, dateFormat, CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
             deadlineDate = result;
             break;
         }
+        catch (FormatException error)
+        {
+            Console.WriteLine("Wrong format.Try again: ");
+        }
 
 
-    }
-
-    catch (FormatException error)
-    {
-        Console.WriteLine("Fel inmatning");
     }
     return deadlineDate;
 }
 
-
-/*void showData()
-{
-    Console.Clear();
-    WriteMenu();
-    int counter = 0;
-    string[] file = File.ReadAllLines(filename);
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.WriteLine("ID       Deadline        Tid        Vad");
-    foreach (string dataInFile in file) 
-    {
-        
-        ToDoItem readData = new ToDoItem();
-        string[] dataFromFile = dataInFile.Split(";");
-        readData.task = dataFromFile[0];
-        readData.deadline = dataFromFile[1];
-        readData.estimatedHours = double.Parse(dataFromFile[2]);
-        readData.isCompleted = bool.Parse(dataFromFile[3]);
-        DateTime now = DateTime.Now;
-        int timeNowYear = now.Year;
-        int timeNowMonth = now.Month;
-        int timeNowDay = now.Day;
-        string[] deadline = readData.deadline.Split("-");
-        int deadlineYear = int.Parse(deadline[0]);
-        int deadlineMonth = int.Parse(deadline[1]);
-        int deadlineDay = int.Parse(deadline[2]);
-
-        if (readData.isCompleted == true)
-        {
-            Console.ForegroundColor
-            = ConsoleColor.Gray;
-        }
-        else if (readData.isCompleted != true && comparedays(ref timeNowDay,ref deadlineDay)==true)
-        {
-            if ( compareDeadlineDays(ref timeNowDay,ref deadlineDay)==true)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-        }
-        else
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        Console.WriteLine($"{counter+".",-9}{readData.deadline,-16}{readData.estimatedHours+"h",-11}{readData.task}");
-
-        counter++;
-    } 
-    Console.ForegroundColor= ConsoleColor.White;
-    //Console.Write("Please choose a new alternative: ");
-    
-}*/
 
 void newShowData()
 {
@@ -307,10 +267,7 @@ void newShowData()
         }
         else
         {
-            /*if (daysAway(now, DateTime.Parse(dataFromFile[0]))))
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }*/
+            
             Console.ForegroundColor = ConsoleColor.White;
         }
         
@@ -335,11 +292,17 @@ int comparedays( DateTime timeNowDay, DateTime deadlineDay)
 {
     int comparedTime = DateTime.Compare(DateTime.Parse(timeNowDay.Date.ToString("yyyy-MM-dd")), deadlineDay);
     
+    bool isSameYear = false;
+    if (deadlineDay.Year == timeNowDay.Year)
+    {
+        isSameYear = true;
+    }
+
     if (comparedTime == 1)
     {
         return -1;
     }
-    else if ((deadlineDay.Day-timeNowDay.Day <= 3 && deadlineDay.Day - timeNowDay.Day >= 0))
+    else if ((deadlineDay.Day-timeNowDay.Day <= 3 && deadlineDay.Day - timeNowDay.Day >= 0) && isSameYear==true)
     { 
         return deadlineDay.Day-timeNowDay.Day; 
     }
@@ -349,35 +312,6 @@ int comparedays( DateTime timeNowDay, DateTime deadlineDay)
     }
 }
 
-string daysAway(DateTime timeNowDay, DateTime deadlineDay)
-{
-    return (timeNowDay - deadlineDay).ToString();
-
-}
-bool compareMonth(ref int timeNowMonth, ref int deadlineMonth)
-{
-    if (deadlineMonth > timeNowMonth)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
-}
-bool compareYear(ref int timeNowYear, ref int deadlineYear)
-{
-    if (deadlineYear >= timeNowYear)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
-}
 
 void endProgram()
 {
