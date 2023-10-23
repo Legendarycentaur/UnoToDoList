@@ -1,0 +1,14 @@
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\bin\Debug\net7.0\ToDoList.exe
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\bin\Debug\net7.0\ToDoList.deps.json
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\bin\Debug\net7.0\ToDoList.runtimeconfig.json
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\bin\Debug\net7.0\ToDoList.dll
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\bin\Debug\net7.0\ToDoList.pdb
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.AssemblyInfoInputs.cache
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.AssemblyInfo.cs
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.csproj.CoreCompileInputs.cache
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.dll
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\refint\ToDoList.dll
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.pdb
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ToDoList.genruntimeconfig.cache
+C:\Users\Anton\Source\Repos\Legendarycentaur\UnoToDoList\ToDoList\obj\Debug\net7.0\ref\ToDoList.dll
